@@ -56,3 +56,13 @@ maxlen = 80 # max number of words in a question to use
 batch_size = 256 # how many samples to process at once
 n_epochs = 5 # how many times to iterate over all samples
 n_splits = 5 # Number of K-fold Splits
+
+
+df_train = pd.read_csv("C:\\Users\\jerem\\OneDrive\\Documents\\Python\\NLP_Quora\\train.csv")
+df_test = pd.read_csv("C:\\Users\\jerem\\OneDrive\\Documents\\Python\\NLP_Quora\\test.csv")
+df = pd.concat([df_train ,df_test],sort=True)
+
+df_train.head()
+df_test.head()
+df_train.shape
+df_test.shape
