@@ -1,3 +1,9 @@
 sample_submission.csv
 test.csv
 train.csv
+features.npy
+x_test.npy
+x_train.npy
+y_train.npy
+word_index.npy
+test_features.npy
