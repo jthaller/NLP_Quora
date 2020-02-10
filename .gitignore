@@ -7,3 +7,5 @@ x_train.npy
 y_train.npy
 word_index.npy
 test_features.npy
+embeddings
+embeddings.zip

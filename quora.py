@@ -10,7 +10,6 @@ import spacy
 from tqdm import tqdm_notebook, tnrange
 from tqdm.auto import tqdm
 from tqdm import tqdm
-# tqdm.pandas()
 tqdm.pandas(desc='Progress')
 
 from collections import Counter
