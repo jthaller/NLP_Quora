@@ -63,6 +63,32 @@ oov[:10]
 for i in range(10):
     print(embeddings_index.index2entity[i])
 
+# On first place there is "to". Why? Simply because "to" was removed when the GoogleNews
+# Embeddings were trained. We will fix this later, for now we take care about the splitting
+# of punctuation as this also seems to be a Problem. But what do we do with the punctuation
+# then - Do we want to delete or consider as a token? I would say:
+# It depends. If the token has an embedding, keep it, if it doesn't we don't need it anymore. So lets check:
+'?' in embeddings_index
+'&' in embeddings_index
+
+def clean_text(x):
+
+    x = str(x)
+    for punct in "/-'":
+        x = x.replace(punct, ' ')
+    for punct in '&':
+        x = x.replace(punct, f' {punct} ')
+    for punct in '?!.,"#$%\'()*+-/:;<=>@[\\]^_`{|}~' + '“”’':
+        x = x.replace(punct, '')
+    return x
+
+train["question_text"] = train["question_text"].progress_apply(lambda x: clean_text(x))
+sentences = train["question_text"].apply(lambda x: x.split())
+vocab = build_vocab(sentences)
+
+oov = check_coverage(vocab,embeddings_index)
+oov[:10]
+
 
 # hmm why is "##" in there? Simply because as a reprocessing all numbers bigger tha 9 have been replaced by hashs.
 # I.e. 15 becomes ## while 123 becomes ### or 15.80€ becomes ##.##€. So lets mimic this preprocessing step to
@@ -88,6 +114,7 @@ oov[:20]
 # take care of mispellings, british -> us english, social media stuff and modern colloquialisms,
 # simply remove the words "a","to","and" and "of" since those have obviously been downsampled
 # when training the GoogleNews Embeddings.
+# multi regex script to do the replacing
 def _get_mispell(mispell_dict):
     mispell_re = re.compile('(%s)' % '|'.join(mispell_dict.keys()))
     return mispell_dict, mispell_re
